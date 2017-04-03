@@ -25,11 +25,13 @@ import tablas.MiModeloTablaArticulos;
  */
 public class AbmClientes extends javax.swing.JInternalFrame {
     private ArrayList listadoClientes=new ArrayList();
+    ClientesTango cliente;
     /**
      * Creates new form AbmClientes
      */
     public AbmClientes() {
         initComponents();
+        cliente=new ClientesTango();
     }
 
     /**
@@ -51,6 +53,9 @@ public class AbmClientes extends javax.swing.JInternalFrame {
         dateChooserCombo3 = new datechooser.beans.DateChooserCombo();
         dateChooserCombo4 = new datechooser.beans.DateChooserCombo();
         jButton3 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setClosable(true);
         setMaximizable(true);
@@ -76,14 +81,18 @@ public class AbmClientes extends javax.swing.JInternalFrame {
             fila[2]=cliente.getDireccion();
             fila[3]=cliente.getTelefono();
             fila[4]=cliente.getCupoDeCredito();
-            fila[5]=cliente.getSaldo();
-            fila[6]=cliente.getListaDePrecios();
+            if(cliente.getSaldo()!=null){
+                fila[5]=cliente.getSaldo();
+            }else{
+                fila[5]="0.00";
+            }
+            fila[6]=cliente.getDescripcionLista();
             miTabla.addRow(fila);
         }
         jTable1.setModel(miTabla);
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("Guardar");
+        jButton1.setText("Nuevo");
         jButton1.setMaximumSize(new java.awt.Dimension(101, 39));
         jButton1.setMinimumSize(new java.awt.Dimension(101, 39));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -139,6 +148,33 @@ public class AbmClientes extends javax.swing.JInternalFrame {
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
+        jButton2.setText("Ver Detalle de Saldo");
+        jButton2.setMaximumSize(new java.awt.Dimension(101, 39));
+        jButton2.setMinimumSize(new java.awt.Dimension(101, 39));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Emitir Lista de Precio");
+        jButton4.setMaximumSize(new java.awt.Dimension(101, 39));
+        jButton4.setMinimumSize(new java.awt.Dimension(101, 39));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Modificar");
+        jButton5.setMaximumSize(new java.awt.Dimension(101, 39));
+        jButton5.setMinimumSize(new java.awt.Dimension(101, 39));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -151,7 +187,10 @@ public class AbmClientes extends javax.swing.JInternalFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -161,10 +200,15 @@ public class AbmClientes extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -190,7 +234,7 @@ public class AbmClientes extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int posicion=this.jTable1.getSelectedRow();
-        ClientesTango cliente=new ClientesTango();
+        /*
         cliente=(ClientesTango)listadoClientes.get(posicion);
         cliente.setRazonSocial(String.valueOf(this.jTable1.getValueAt(posicion,1)));
         cliente.setDireccion(String.valueOf(this.jTable1.getValueAt(posicion, 2)));
@@ -213,6 +257,7 @@ public class AbmClientes extends javax.swing.JInternalFrame {
         cliente.setListaDePrecios((Integer.parseInt(String.valueOf(this.jTable1.getValueAt(posicion,6)))));
         Facturar fact=new ClientesTango();
         fact.modificarDatosDelCliente(cliente);
+                */
         //this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -248,11 +293,39 @@ public class AbmClientes extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int posicion=this.jTable1.getSelectedRow();
+        cliente=(ClientesTango) listadoClientes.get(posicion);
+        AbmSaldosClientes abm=new AbmSaldosClientes(cliente);
+        Inicio.jDesktopPane1.add(abm);
+        abm.setVisible(true);
+        abm.toFront();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        int posicion=this.jTable1.getSelectedRow();
+        cliente=(ClientesTango) listadoClientes.get(posicion);
+        
+        InformesClientes info=new InformesClientes();
+        try {
+            info.GenerarListadoDeMovimientos(cliente);
+        } catch (SQLException ex) {
+            Logger.getLogger(AbmClientes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private datechooser.beans.DateChooserCombo dateChooserCombo3;
     private datechooser.beans.DateChooserCombo dateChooserCombo4;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;

@@ -8,6 +8,7 @@ package facturacion.clientes;
 import Conversores.Numeros;
 import interfaceGraficas.Inicio;
 import interfaces.Adeudable;
+import interfaces.Movible;
 import interfaces.Transaccionable;
 import interfacesPrograma.Busquedas;
 import interfacesPrograma.Facturar;
@@ -23,6 +24,7 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 import objetos.Comprobantes;
 import objetos.ConeccionLocal;
 import objetos.Conecciones;
@@ -32,7 +34,7 @@ import objetos.Conecciones;
  *
  * @author Administrador
  */
-public class ClientesTango implements Busquedas,Facturar,Adeudable{
+public class ClientesTango implements Busquedas,Facturar,Adeudable,Movible{
         private String codigoCliente;
         private String razonSocial;
         private Double saldo;
@@ -59,13 +61,21 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
         private Integer codigoId;
         private Double cupoDeCredito;
         private Double saldoActual;
+        private String descripcionLista;
         private static Integer numeroRecibo;
         private static ConcurrentHashMap listadoClientes=new ConcurrentHashMap();
         private static ConcurrentHashMap listadoPorNom=new ConcurrentHashMap();
         private static ConcurrentHashMap listadoPorId=new ConcurrentHashMap();
         private static int signal=0;
+
         
-        
+    public String getDescripcionLista() {
+        return descripcionLista;
+    }
+
+    public void setDescripcionLista(String descripcionLista) {
+        this.descripcionLista = descripcionLista;
+    }
         
 
     public Double getCupoDeCredito() {
@@ -107,7 +117,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
             }else{
              
                 tra=new ConeccionLocal();
-                sql="select codMmd,id,listcli.COD_CLIENT,listcli.RAZON_SOCI,listcli.DOMICILIO,listcli.COND_VTA,(listcli.LISTADEPRECIO)as NRO_LISTA,(listcli.NUMERODECUIT)as IDENTIFTRI,listcli.empresa,listcli.TELEFONO_1,listcli.coeficiente,(listcli.CUPODECREDITO) AS CUPO_CREDI,listcli.saldo,listcli.TIPO_IVA from listcli order by RAZON_SOCI";
+                sql="select codMmd,id,listcli.COD_CLIENT,listcli.RAZON_SOCI,listcli.DOMICILIO,listcli.COND_VTA,(listcli.LISTADEPRECIO)as NRO_LISTA,(listcli.NUMERODECUIT)as IDENTIFTRI,listcli.empresa,listcli.TELEFONO_1,listcli.coeficiente,(listcli.CUPODECREDITO) AS CUPO_CREDI,listcli.saldo,listcli.TIPO_IVA,(select coeficienteslistas.coeficiente from coeficienteslistas where coeficienteslistas.id=listcli.LISTADEPRECIO)as coeficienteL from listcli order by RAZON_SOCI";
             }
             //sql="select *,(select coeficienteslistas.coeficiente from coeficienteslistas where coeficienteslistas.id=listcli.NRO_LISTA)as coeficiente,(select sum(movimientosclientes.monto) from movimientosclientes where pagado=0 and movimientosclientes.numeroProveedor=listcli.id)as saldo from listcli";
             //System.out.println("CLIENTES "+sql);
@@ -141,7 +151,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
                 cli.setCondicionIva(rs.getString("TIPO_IVA"));
                 cli.setTelefono(rs.getString("TELEFONO_1"));
        
-                cli.setCoeficienteListaDeprecios(rs.getDouble("coeficiente"));
+                cli.setCoeficienteListaDeprecios(rs.getDouble("coeficienteL"));
                 cli.setCupoDeCredito(rs.getDouble("CUPO_CREDI"));
                // if(Inicio.usuario.getNivelDeAutorizacion()==1){
                 System.out.println("ACTUALIZACION :"+Inicio.actualizacionesClientes);
@@ -524,7 +534,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
             cliente=cliente.toUpperCase();
             String sql;
             tra=new ConeccionLocal();
-                sql="select codMmd,listcli.COD_CLIENT,listcli.RAZON_SOCI,listcli.DOMICILIO,listcli.COND_VTA,(listcli.LISTADEPRECIO)as NRO_LISTA,(listcli.NUMERODECUIT)as IDENTIFTRI,listcli.empresa,listcli.TELEFONO_1,listcli.coeficiente,(listcli.CUPODECREDITO) AS CUPO_CREDI,listcli.saldo,listcli.TIPO_IVA from listcli where RAZON_SOCI like '%"+cliente+"%' order by RAZON_SOCI";
+                sql="select codMmd,listcli.COD_CLIENT,listcli.RAZON_SOCI,listcli.DOMICILIO,listcli.COND_VTA,(listcli.LISTADEPRECIO)as NRO_LISTA,(listcli.NUMERODECUIT)as IDENTIFTRI,listcli.empresa,listcli.TELEFONO_1,listcli.coeficiente,(listcli.CUPODECREDITO) AS CUPO_CREDI,listcli.saldo,listcli.TIPO_IVA,(select coeficienteslistas.descripcion from coeficienteslistas where coeficienteslistas.id=listcli.LISTADEPRECIO)as descLista,(select coeficienteslistas.coeficiente from coeficienteslistas where coeficienteslistas.id=listcli.LISTADEPRECIO)as coeficienteL from listcli where RAZON_SOCI like '%"+cliente+"%' order by RAZON_SOCI";
             
             //sql="select *,(select coeficienteslistas.coeficiente from coeficienteslistas where coeficienteslistas.id=listcli.NRO_LISTA)as coeficiente,(select sum(movimientosclientes.monto) from movimientosclientes where pagado=0 and movimientosclientes.numeroProveedor=listcli.id)as saldo from listcli";
             //System.out.println("CLIENTES "+sql);
@@ -549,8 +559,9 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
                     cli.setCondicionIva(rs.getString("TIPO_IVA"));
                     cli.setTelefono(rs.getString("TELEFONO_1"));
                     
-                    cli.setCoeficienteListaDeprecios(rs.getDouble("coeficiente"));
+                    cli.setCoeficienteListaDeprecios(rs.getDouble("coeficienteL"));
                     cli.setCupoDeCredito(rs.getDouble("CUPO_CREDI"));
+                    cli.setDescripcionLista(rs.getString("descLista"));
                     // if(Inicio.usuario.getNivelDeAutorizacion()==1){
                     System.out.println("ACTUALIZACION :"+Inicio.actualizacionesClientes);
                     ped.add(cli);
@@ -684,7 +695,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
     @Override
     public Object cargarPorCodigoAsignado(Integer id) {
          Transaccionable tra=new ConeccionLocal();
-                String sql="select codMmd,id,listcli.COD_CLIENT,listcli.RAZON_SOCI,listcli.DOMICILIO,listcli.COND_VTA,(listcli.LISTADEPRECIO)as NRO_LISTA,(listcli.NUMERODECUIT)as IDENTIFTRI,listcli.empresa,listcli.TELEFONO_1,listcli.coeficiente,(listcli.CUPODECREDITO) AS CUPO_CREDI,listcli.saldo,listcli.TIPO_IVA from listcli where id="+id;
+                String sql="select codMmd,id,listcli.COD_CLIENT,listcli.RAZON_SOCI,listcli.DOMICILIO,listcli.COND_VTA,(listcli.LISTADEPRECIO)as NRO_LISTA,(listcli.NUMERODECUIT)as IDENTIFTRI,listcli.empresa,listcli.TELEFONO_1,listcli.coeficiente,(listcli.CUPODECREDITO) AS CUPO_CREDI,listcli.saldo,listcli.TIPO_IVA,(select coeficienteslistas.coeficiente from coeficienteslistas where coeficienteslistas.id=listcli.LISTADEPRECIO)as coeficienteL from listcli where id="+id;
                 ResultSet rs=tra.leerConjuntoDeRegistros(sql);
                 ClientesTango cli=null;
                 
@@ -710,7 +721,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
                     cli.setCondicionIva(rs.getString("TIPO_IVA"));
                     cli.setTelefono(rs.getString("TELEFONO_1"));
                     
-                    cli.setCoeficienteListaDeprecios(rs.getDouble("coeficiente"));
+                    cli.setCoeficienteListaDeprecios(rs.getDouble("coeficienteL"));
                     cli.setCupoDeCredito(rs.getDouble("CUPO_CREDI"));
                     // if(Inicio.usuario.getNivelDeAutorizacion()==1){
                     System.out.println("ACTUALIZACION :"+Inicio.actualizacionesClientes);
@@ -779,6 +790,36 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
        tra.guardarRegistro(sql);
        GuardarNumeroRecibo();
        return factProv;
+    }
+
+    @Override
+    public ArrayList ListarMovimientos(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Double AjustarSaldo(Double saldoActual, Integer idCliente) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultTableModel MostrarMovimientos(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultTableModel MostrarListaDePrecios(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList ListarPreciosCliente(Object cliente) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList ListarMovimientosPorFechas(Integer id, String desde, String hasta) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
         
 }

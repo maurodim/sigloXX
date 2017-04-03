@@ -57,6 +57,9 @@
                           <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
+                      <Component id="jButton2" max="32767" attributes="0"/>
+                      <Component id="jButton4" max="32767" attributes="0"/>
+                      <Component id="jButton5" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -69,11 +72,16 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="jButton1" min="-2" pref="39" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton5" min="-2" pref="39" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton2" min="-2" pref="39" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton4" min="-2" pref="39" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
-                      <Component id="jScrollPane1" pref="474" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="467" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -95,14 +103,14 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="MiModeloTablaArticulos miTabla=new MiModeloTablaArticulos();&#xa;Busquedas bus=new ClientesTango();&#xa;listadoClientes=bus.listar(&quot;&quot;);&#xa;Iterator listC=listadoClientes.listIterator();&#xa;miTabla.addColumn(&quot;COD CLIENTE&quot;);&#xa;miTabla.addColumn(&quot;RAZON SOCIAL&quot;);&#xa;miTabla.addColumn(&quot;DIRECCION&quot;);&#xa;miTabla.addColumn(&quot;TELEFONO&quot;);&#xa;miTabla.addColumn(&quot;CUPO DE CREDITO&quot;);&#xa;miTabla.addColumn(&quot;SALDO&quot;);&#xa;miTabla.addColumn(&quot;LISTA DE PRECIO&quot;);&#xa;Object[] fila=new Object[7];&#xa;ClientesTango cliente=new ClientesTango();&#xa;while(listC.hasNext()){&#xa;    cliente=(ClientesTango)listC.next();&#xa;    fila[0]=cliente.getCodigoId();&#xa;fila[1]=cliente.getRazonSocial();&#xa;fila[2]=cliente.getDireccion();&#xa;fila[3]=cliente.getTelefono();&#xa;fila[4]=cliente.getCupoDeCredito();&#xa;fila[5]=cliente.getSaldo();&#xa;fila[6]=cliente.getListaDePrecios();&#xa;miTabla.addRow(fila);&#xa;}"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="MiModeloTablaArticulos miTabla=new MiModeloTablaArticulos();&#xa;Busquedas bus=new ClientesTango();&#xa;listadoClientes=bus.listar(&quot;&quot;);&#xa;Iterator listC=listadoClientes.listIterator();&#xa;miTabla.addColumn(&quot;COD CLIENTE&quot;);&#xa;miTabla.addColumn(&quot;RAZON SOCIAL&quot;);&#xa;miTabla.addColumn(&quot;DIRECCION&quot;);&#xa;miTabla.addColumn(&quot;TELEFONO&quot;);&#xa;miTabla.addColumn(&quot;CUPO DE CREDITO&quot;);&#xa;miTabla.addColumn(&quot;SALDO&quot;);&#xa;miTabla.addColumn(&quot;LISTA DE PRECIO&quot;);&#xa;Object[] fila=new Object[7];&#xa;ClientesTango cliente=new ClientesTango();&#xa;while(listC.hasNext()){&#xa;    cliente=(ClientesTango)listC.next();&#xa;    fila[0]=cliente.getCodigoId();&#xa;fila[1]=cliente.getRazonSocial();&#xa;fila[2]=cliente.getDireccion();&#xa;fila[3]=cliente.getTelefono();&#xa;fila[4]=cliente.getCupoDeCredito();&#xa;if(cliente.getSaldo()!=null){&#xa;fila[5]=cliente.getSaldo();&#xa;}else{&#xa;fila[5]=&quot;0.00&quot;;&#xa;}&#xa;fila[6]=cliente.getDescripcionLista();&#xa;miTabla.addRow(fila);&#xa;}"/>
               </AuxValues>
             </Component>
           </SubComponents>
         </Container>
         <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Guardar"/>
+            <Property name="text" type="java.lang.String" value="Nuevo"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[101, 39]"/>
             </Property>
@@ -188,6 +196,48 @@
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JButton" name="jButton2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Ver Detalle de Saldo"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[101, 39]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[101, 39]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton4">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Emitir Lista de Precio"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[101, 39]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[101, 39]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton5">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Modificar"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[101, 39]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[101, 39]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>
